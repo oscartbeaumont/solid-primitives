@@ -71,6 +71,7 @@ export const createWSState = (ws: WebSocket): Accessor<0 | 1 | 2 | 3> => {
 export type WSReconnectOptions = {
   delay?: number;
   retries?: number;
+  onConnect?: () => void;
 };
 
 export type ReconnectingWebSocket = WebSocket & {
@@ -113,6 +114,7 @@ export const makeReconnectingWS = (
       reconnect: getWS,
     });
     events.forEach(args => ws.addEventListener(...args));
+    options.onConnect?.();
   };
   getWS();
   const wws: Partial<ReconnectingWebSocket> = {
